@@ -3,9 +3,10 @@ import Header from './components/Header'
 import Main from './components/Main'
 import HeaderSearch from './components/HeaderSearch'
 import HeaderSearchResults from './components/HeaderSearchResults'
-import MoviesPanel from './components/MoviesPanel'
-import WatchedMoviesPanel from './components/WatchedMoviesPanel'
+import Panel from './components/Panel'
 import Movies from './components/Movies'
+import WatchedMoviesSummary from './components/WatchedMoviesSummary'
+import WatchedMovies from './components/WatchedMovies'
 
 const tempMovieData = [
   {
@@ -31,8 +32,32 @@ const tempMovieData = [
   },
 ]
 
+const tempWatchedData = [
+  {
+    imdbID: 'tt1375666',
+    Title: 'Inception',
+    Year: '2010',
+    Poster:
+      'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg',
+    runtime: 148,
+    imdbRating: 8.8,
+    userRating: 10,
+  },
+  {
+    imdbID: 'tt0088763',
+    Title: 'Back to the Future',
+    Year: '1985',
+    Poster:
+      'https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg',
+    runtime: 116,
+    imdbRating: 8.5,
+    userRating: 9,
+  },
+]
+
 function App() {
   const [movies, setMovies] = useState(tempMovieData)
+  const [watchedMovies, setWatchedMovies] = useState(tempWatchedData)
 
   return (
     <div className="bg-[#212529] p-[2.4rem] text-[#dee2e6]">
@@ -41,10 +66,13 @@ function App() {
         <HeaderSearchResults movies={movies} />
       </Header>
       <Main>
-        <MoviesPanel>
+        <Panel>
           <Movies movies={movies} />
-        </MoviesPanel>
-        <WatchedMoviesPanel />
+        </Panel>
+        <Panel>
+          <WatchedMoviesSummary watchedMovies={watchedMovies} />
+          <WatchedMovies watchedMovies={watchedMovies} />
+        </Panel>
       </Main>
     </div>
   )

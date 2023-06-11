@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function MoviesPanel({ children }) {
+function Panel({ children }) {
   const [showMovies, setShowMovies] = useState(true)
 
   return (
@@ -16,4 +16,4 @@ function MoviesPanel({ children }) {
   )
 }
 
-export default MoviesPanel
+export default Panel
