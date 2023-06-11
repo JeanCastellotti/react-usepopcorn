@@ -64,7 +64,7 @@ function App() {
         showMovies={showMovies}
         showWatchedMovies={showWatchedMovies}
         onShowMovies={setShowMovies}
-        onShowWatchesMovies={setShowWatchedMovies}
+        onShowWatchedMovies={setShowWatchedMovies}
       />
     </div>
   )
