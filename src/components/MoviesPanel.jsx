@@ -1,4 +1,6 @@
-function MoviesPanel({movies, showMovies, onShowMovies}) {
+import Movies from './Movies'
+
+function MoviesPanel({ movies, showMovies, onShowMovies }) {
   return (
     <div className="relative w-[42rem] max-w-[42rem] overflow-hidden overflow-y-auto rounded-[0.9rem] bg-[#2b3035]">
       <button
@@ -7,29 +9,7 @@ function MoviesPanel({movies, showMovies, onShowMovies}) {
       >
         {showMovies ? '-' : '+'}
       </button>
-      {showMovies && (
-        <ul className="divide-y divide-[#343a40]">
-          {movies.map((movie) => (
-            <li
-              key={movie.imdbID}
-              className="relative flex cursor-pointer items-center gap-x-10 px-[3.2rem] py-[1.6rem] text-xl transition-all hover:bg-[#343a40]"
-            >
-              <img
-                src={movie.Poster}
-                alt={`${movie.Title} poster`}
-                className="row-[1/-1] w-20 object-cover"
-              />
-              <div className="space-y-2">
-                <h3 className="text-2xl font-semibold">{movie.Title}</h3>
-                <p className="flex items-center gap-2">
-                  <span>🗓</span>
-                  <span>{movie.Year}</span>
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+      {showMovies && <Movies movies={movies} />}
     </div>
   )
 }
