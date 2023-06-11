@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import Movies from './Movies'
 
-function MoviesPanel({ movies }) {
+function MoviesPanel({ children }) {
   const [showMovies, setShowMovies] = useState(true)
 
   return (
@@ -12,7 +11,7 @@ function MoviesPanel({ movies }) {
       >
         {showMovies ? '-' : '+'}
       </button>
-      {showMovies && <Movies movies={movies} />}
+      {showMovies && children}
     </div>
   )
 }

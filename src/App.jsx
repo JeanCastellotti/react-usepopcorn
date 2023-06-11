@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import Header from './components/Header'
 import Main from './components/Main'
+import HeaderSearch from './components/HeaderSearch'
+import HeaderSearchResults from './components/HeaderSearchResults'
+import MoviesPanel from './components/MoviesPanel'
+import WatchedMoviesPanel from './components/WatchedMoviesPanel'
+import Movies from './components/Movies'
 
 const tempMovieData = [
   {
@@ -31,8 +36,16 @@ function App() {
 
   return (
     <div className="bg-[#212529] p-[2.4rem] text-[#dee2e6]">
-      <Header movies={movies} />
-      <Main movies={movies} />
+      <Header>
+        <HeaderSearch />
+        <HeaderSearchResults movies={movies} />
+      </Header>
+      <Main>
+        <MoviesPanel>
+          <Movies movies={movies} />
+        </MoviesPanel>
+        <WatchedMoviesPanel />
+      </Main>
     </div>
   )
 }
