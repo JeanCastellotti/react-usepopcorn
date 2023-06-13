@@ -1,6 +1,6 @@
 import Movie from './Movie'
 
-function Movies({ movies }) {
+function MovieList({ movies }) {
   return (
     <ul className="divide-y divide-[#343a40]">
       {movies.map((movie) => (
@@ -10,4 +10,4 @@ function Movies({ movies }) {
   )
 }
 
-export default Movies
+export default MovieList

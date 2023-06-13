@@ -1,12 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from './components/Header'
 import Main from './components/Main'
 import HeaderSearch from './components/HeaderSearch'
 import HeaderSearchResults from './components/HeaderSearchResults'
 import Panel from './components/Panel'
-import Movies from './components/Movies'
+import MovieList from './components/MovieList'
 import WatchedMoviesSummary from './components/WatchedMoviesSummary'
-import WatchedMovies from './components/WatchedMovies'
+import WatchedMovieList from './components/WatchedMovieList'
+import Loader from './components/Loader'
+import ErrorMessage from './components/ErrorMessage'
 
 const tempMovieData = [
   {
@@ -55,23 +57,57 @@ const tempWatchedData = [
   },
 ]
 
+const apiKey = import.meta.env.VITE_API_KEY
+const apiUrl = `http://www.omdbapi.com/?apikey=${apiKey}`
+
 function App() {
-  const [movies, setMovies] = useState(tempMovieData)
-  const [watchedMovies, setWatchedMovies] = useState(tempWatchedData)
+  const [movies, setMovies] = useState([])
+  const [watchedMovies, setWatchedMovies] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [query, setQuery] = useState('beetlejuice')
+
+  useEffect(() => {
+    async function fetchMovies() {
+      try {
+        setIsLoading(true)
+        setError(null)
+        const res = await fetch(apiUrl + `&s=${query}`)
+        if (!res.ok) throw new Error('Failed to load')
+        const data = await res.json()
+        if (data.Response === 'False') throw new Error(data.Error)
+        setMovies(data.Search)
+      } catch (error) {
+        setError(error.message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (query.length < 3) {
+      setMovies([])
+      setError(null)
+      return
+    }
+
+    fetchMovies()
+  }, [query])
 
   return (
     <div className="bg-[#212529] p-[2.4rem] text-[#dee2e6]">
       <Header>
-        <HeaderSearch />
+        <HeaderSearch query={query} onSearch={setQuery} />
         <HeaderSearchResults movies={movies} />
       </Header>
       <Main>
         <Panel>
-          <Movies movies={movies} />
+          {isLoading && <Loader />}
+          {error && <ErrorMessage message={error} />}
+          {!isLoading && !error && <MovieList movies={movies} />}
         </Panel>
         <Panel>
           <WatchedMoviesSummary watchedMovies={watchedMovies} />
-          <WatchedMovies watchedMovies={watchedMovies} />
+          <WatchedMovieList watchedMovies={watchedMovies} />
         </Panel>
       </Main>
     </div>

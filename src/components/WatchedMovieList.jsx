@@ -1,6 +1,6 @@
 import WatchedMovie from './WatchedMovie'
 
-function WatchedMovies({ watchedMovies }) {
+function WatchedMovieList({ watchedMovies }) {
   return (
     <ul className="divide-y divide-[#343a40] py-[0.8rem]">
       {watchedMovies.map((movie) => (
@@ -10,4 +10,4 @@ function WatchedMovies({ watchedMovies }) {
   )
 }
 
-export default WatchedMovies
+export default WatchedMovieList
