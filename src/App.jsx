@@ -9,6 +9,7 @@ import WatchedMoviesSummary from './components/WatchedMoviesSummary'
 import WatchedMovieList from './components/WatchedMovieList'
 import Loader from './components/Loader'
 import ErrorMessage from './components/ErrorMessage'
+import SelectedMovie from './components/SelectedMovie'
 
 const tempMovieData = [
   {
@@ -66,6 +67,21 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [query, setQuery] = useState('beetlejuice')
+  const [selectedMovieID, setSelectedMovieID] = useState(null)
+
+  function handleSelectMovie(id) {
+    setSelectedMovieID((selectedMovieID) =>
+      selectedMovieID === id ? null : id
+    )
+  }
+
+  function handleCloseSelectedMovie() {
+    setSelectedMovieID(null)
+  }
+
+  function handleAddWatchedMovie(movie) {
+    setWatchedMovies((movies) => [...movies, movie])
+  }
 
   useEffect(() => {
     async function fetchMovies() {
@@ -103,11 +119,23 @@ function App() {
         <Panel>
           {isLoading && <Loader />}
           {error && <ErrorMessage message={error} />}
-          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error && (
+            <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
+          )}
         </Panel>
         <Panel>
-          <WatchedMoviesSummary watchedMovies={watchedMovies} />
-          <WatchedMovieList watchedMovies={watchedMovies} />
+          {selectedMovieID ? (
+            <SelectedMovie
+              selectedMovieID={selectedMovieID}
+              onCloseSelectedMovie={handleCloseSelectedMovie}
+              onAddWatchedMovie={handleAddWatchedMovie}
+            />
+          ) : (
+            <>
+              <WatchedMoviesSummary watchedMovies={watchedMovies} />
+              <WatchedMovieList watchedMovies={watchedMovies} />
+            </>
+          )}
         </Panel>
       </Main>
     </div>

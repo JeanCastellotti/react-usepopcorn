@@ -1,6 +1,9 @@
-function Movie({ movie }) {
+function Movie({ movie, onSelectMovie }) {
   return (
-    <li className="relative flex cursor-pointer items-center gap-x-10 px-[3.2rem] py-[1.6rem] text-xl transition-all hover:bg-[#343a40]">
+    <li
+      onClick={() => onSelectMovie(movie.imdbID)}
+      className="relative flex cursor-pointer items-center gap-x-10 px-[3.2rem] py-[1.6rem] text-xl transition-all hover:bg-[#343a40]"
+    >
       <img
         src={movie.Poster}
         alt={`${movie.Title} poster`}
