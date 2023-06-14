@@ -33,21 +33,31 @@ function App() {
   }
 
   function handleAddWatchedMovie(movie) {
+    if (watchedMovies.find((movie) => movie.imdbID === selectedMovieID)) return
     setWatchedMovies((movies) => [...movies, movie])
   }
 
+  function handleDeleteWatchedMovie(id) {
+    setWatchedMovies((movies) => movies.filter((movie) => movie.imdbID !== id))
+  }
+
   useEffect(() => {
+    const controller = new AbortController()
+
     async function fetchMovies() {
       try {
         setIsLoading(true)
         setError(null)
-        const res = await fetch(apiUrl + `&s=${query}`)
+        const res = await fetch(apiUrl + `&s=${query}`, {
+          signal: controller.signal,
+        })
         if (!res.ok) throw new Error('Failed to load')
         const data = await res.json()
         if (data.Response === 'False') throw new Error(data.Error)
         setMovies(data.Search)
+        setError(null)
       } catch (error) {
-        setError(error.message)
+        if (error.name !== 'AbortError') setError(error.message)
       } finally {
         setIsLoading(false)
       }
@@ -59,7 +69,12 @@ function App() {
       return
     }
 
+    handleCloseSelectedMovie()
     fetchMovies()
+
+    return () => {
+      controller.abort()
+    }
   }, [query])
 
   return (
@@ -82,11 +97,15 @@ function App() {
               selectedMovieID={selectedMovieID}
               onCloseSelectedMovie={handleCloseSelectedMovie}
               onAddWatchedMovie={handleAddWatchedMovie}
+              watchedMovies={watchedMovies}
             />
           ) : (
             <>
               <WatchedMoviesSummary watchedMovies={watchedMovies} />
-              <WatchedMovieList watchedMovies={watchedMovies} />
+              <WatchedMovieList
+                watchedMovies={watchedMovies}
+                onDeleteWatchedMovie={handleDeleteWatchedMovie}
+              />
             </>
           )}
         </Panel>

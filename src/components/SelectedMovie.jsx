@@ -9,9 +9,19 @@ function SelectedMovie({
   selectedMovieID,
   onCloseSelectedMovie,
   onAddWatchedMovie,
+  watchedMovies,
 }) {
   const [selectedMovie, setSelectedMovie] = useState({})
   const [isLoading, setIsLoading] = useState(false)
+  const [userRating, setUserRating] = useState(0)
+
+  const isInWatchedMoviesList = watchedMovies.find(
+    (movie) => movie.imdbID === selectedMovieID
+  )
+
+  const watchedMovieUserRating = watchedMovies.find(
+    (movie) => movie.imdbID === selectedMovieID
+  )?.userRating
 
   const {
     Title: title,
@@ -34,8 +44,22 @@ function SelectedMovie({
       poster,
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split(' ').at(0)),
+      userRating,
     })
+    onCloseSelectedMovie()
   }
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.code === 'Escape') onCloseSelectedMovie()
+    }
+
+    document.addEventListener('keydown', handler)
+
+    return () => {
+      document.removeEventListener('keydown', handler)
+    }
+  }, [onCloseSelectedMovie])
 
   useEffect(() => {
     async function fetchMovieDetails() {
@@ -87,11 +111,11 @@ function SelectedMovie({
                 <span className="m-auto text-4xl">?</span>
               </div>
             ) : (
-            <img
-              src={poster}
-              alt={`Poster of ${title}`}
-              className="w-1/3 object-cover"
-            />
+              <img
+                src={poster}
+                alt={`Poster of ${title}`}
+                className="w-1/3 object-cover"
+              />
             )}
             <div className="w-full space-y-2 bg-[#343a40] px-12 py-10">
               <h2 className="mb-2 text-2xl font-bold">{title}</h2>
@@ -107,13 +131,33 @@ function SelectedMovie({
           </header>
           <section className="space-y-5 p-16 text-lg">
             <div className="mb-3 flex flex-col justify-center space-y-3 rounded bg-[#343a40] px-5 py-4 font-semibold">
-              <Rating maxRating={10} size={32} className={'justify-between'} />
-              <button
-                onClick={handleAddWatchedMovie}
-                className="cursor-pointer rounded bg-[#6741d9] px-3 py-1 font-bold text-[#dee2e6] transition hover:bg-[#7950f2]"
-              >
-                Add to list
-              </button>
+              {isInWatchedMoviesList ? (
+                <p className="flex flex-col items-center gap-1">
+                  <span>You already rated this movie</span>
+                  <div>
+                    {[...Array(watchedMovieUserRating).keys()].map(() => (
+                      <span>⭐</span>
+                    ))}
+                  </div>
+                </p>
+              ) : (
+                <>
+                  <Rating
+                    maxRating={10}
+                    size={32}
+                    className={'justify-between'}
+                    onSetRating={setUserRating}
+                  />
+                  {!!userRating && (
+                    <button
+                      onClick={handleAddWatchedMovie}
+                      className="cursor-pointer rounded bg-[#6741d9] px-3 py-1 font-bold text-[#dee2e6] transition hover:bg-[#7950f2]"
+                    >
+                      Add to list
+                    </button>
+                  )}
+                </>
+              )}
             </div>
             <p>
               <em>{plot}</em>

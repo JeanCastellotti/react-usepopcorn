@@ -9,11 +9,11 @@ function Movie({ movie, onSelectMovie }) {
           <span className="m-auto text-4xl">?</span>
         </div>
       ) : (
-      <img
-        src={movie.Poster}
-        alt={`${movie.Title} poster`}
-        className="row-[1/-1] w-20 object-cover"
-      />
+        <img
+          src={movie.Poster}
+          alt={`${movie.Title} poster`}
+          className="row-[1/-1] w-20 object-cover"
+        />
       )}
       <div className="space-y-2">
         <h3 className="text-2xl font-semibold">{movie.Title}</h3>
