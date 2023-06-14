@@ -1,11 +1,17 @@
 function WatchedMovie({ movie }) {
   return (
     <li className="relative flex cursor-pointer items-center gap-x-10 px-[3.2rem] py-[1.6rem] text-xl transition-all hover:bg-[#343a40]">
+      {movie.poster === 'N/A' ? (
+        <div className="row-[1/-1] flex h-20 w-20 shrink-0 rounded bg-slate-600">
+          <span className="m-auto text-4xl">?</span>
+        </div>
+      ) : (
       <img
         src={movie.poster}
-        alt={`${movie.title} Poster`}
+          alt={`${movie.title} poster`}
         className="row-[1/-1] w-20 object-cover"
       />
+      )}
       <div className="space-y-3">
         <h3 className="text-2xl font-semibold">{movie.title}</h3>
         <div className="flex items-center gap-[2.4rem]">
