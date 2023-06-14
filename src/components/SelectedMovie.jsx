@@ -49,6 +49,15 @@ function SelectedMovie({
     fetchMovieDetails()
   }, [selectedMovieID])
 
+  useEffect(() => {
+    if (!title) return
+    document.title = title
+
+    return () => {
+      document.title = 'usePopCorn'
+    }
+  }, [title])
+
   return (
     <div className="relative h-full">
       {isLoading ? (
