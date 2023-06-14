@@ -18,15 +18,15 @@ function WatchedMoviesSummary({ watchedMovies }) {
         </p>
         <p className="flex items-center gap-2">
           <span>⭐️</span>
-          {/* <span>{avgImdbRating}</span> */}
+          <span>{avgImdbRating.toFixed(2)}</span>
         </p>
         <p className="flex items-center gap-2">
           <span>🌟</span>
-          {/* <span>{avgUserRating}</span> */}
+          <span>{avgUserRating.toFixed(2)}</span>
         </p>
         <p className="flex items-center gap-2">
           <span>⏳</span>
-          <span>{avgRuntime} min</span>
+          <span>{avgRuntime.toFixed(2)} min</span>
         </p>
       </div>
     </div>
