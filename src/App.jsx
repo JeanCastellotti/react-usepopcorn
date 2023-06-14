@@ -19,7 +19,7 @@ function App() {
   const [watchedMovies, setWatchedMovies] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [query, setQuery] = useState('beetlejuice')
+  const [query, setQuery] = useState('')
   const [selectedMovieID, setSelectedMovieID] = useState(null)
 
   function handleSelectMovie(id) {
