@@ -17,15 +17,15 @@ function WatchedMovie({ movie, onDeleteWatchedMovie }) {
         <div className="flex items-center gap-[2.4rem]">
           <p className="flex items-center gap-2">
             <span>⭐️</span>
-            <span>{movie.imdbRating}</span>
+            <span>{movie.imdbRating ? movie.imdbRating : '-'}</span>
           </p>
           <p className="flex items-center gap-2">
             <span>🌟</span>
-            <span>{movie.userRating}</span>
+            <span>{movie.userRating ? movie.userRating : '-'}</span>
           </p>
           <p className="flex items-center gap-2">
             <span>⏳</span>
-            <span>{movie.runtime} min</span>
+            <span>{movie.runtime ? `${movie.runtime} min` : '-'}</span>
           </p>
         </div>
       </div>
