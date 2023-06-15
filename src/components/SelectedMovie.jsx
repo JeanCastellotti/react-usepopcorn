@@ -132,14 +132,14 @@ function SelectedMovie({
           <section className="space-y-5 p-16 text-lg">
             <div className="mb-3 flex flex-col justify-center space-y-3 rounded bg-[#343a40] px-5 py-4 font-semibold">
               {isInWatchedMoviesList ? (
-                <p className="flex flex-col items-center gap-1">
+                <div className="flex flex-col items-center gap-1">
                   <span>You already rated this movie</span>
                   <div>
-                    {[...Array(watchedMovieUserRating).keys()].map(() => (
-                      <span>⭐</span>
+                    {[...Array(watchedMovieUserRating).keys()].map((i) => (
+                      <span key={i}>⭐</span>
                     ))}
                   </div>
-                </p>
+                </div>
               ) : (
                 <>
                   <Rating
