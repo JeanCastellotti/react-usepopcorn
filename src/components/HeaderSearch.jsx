@@ -1,26 +1,14 @@
-import { useEffect } from 'react'
 import { useRef } from 'react'
+import { useKey } from '../hooks/useKey'
 
 function HeaderSearch({ query, onSearch }) {
   const input = useRef(null)
 
-  useEffect(() => {
-    const handler = (e) => {
-      if (document.activeElement === input.current) return
-
-      if (e.code === 'Enter') {
-        onSearch('')
-        input.current.focus()
-      }
-    }
-
-    document.addEventListener('keydown', handler)
+  useKey('Enter', () => {
+    if (document.activeElement === input.current) return
+    onSearch('')
     input.current.focus()
-
-    return () => {
-      document.removeEventListener('keydown', handler)
-    }
-  }, [onSearch])
+  })
 
   return (
     <input

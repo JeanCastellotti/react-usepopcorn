@@ -10,19 +10,15 @@ import WatchedMovieList from './components/WatchedMovieList'
 import Loader from './components/Loader'
 import ErrorMessage from './components/ErrorMessage'
 import SelectedMovie from './components/SelectedMovie'
-
-const apiKey = import.meta.env.VITE_API_KEY
-const apiUrl = `http://www.omdbapi.com/?apikey=${apiKey}`
+import { useMovies } from './hooks/useMovies'
+import { useLocalStorage } from './hooks/useLocalStorage'
 
 function App() {
-  const [movies, setMovies] = useState([])
-  const [watchedMovies, setWatchedMovies] = useState(() =>
-    JSON.parse(localStorage.getItem('watchedMovies'))
-  )
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
   const [query, setQuery] = useState('')
   const [selectedMovieID, setSelectedMovieID] = useState(null)
+
+  const [watchedMovies, setWatchedMovies] = useLocalStorage([], 'watchedMovies')
+  const [movies, isLoading, error] = useMovies(query, handleCloseSelectedMovie)
 
   function handleSelectMovie(id) {
     setSelectedMovieID((selectedMovieID) =>
@@ -41,46 +37,6 @@ function App() {
   function handleDeleteWatchedMovie(id) {
     setWatchedMovies((movies) => movies.filter((movie) => movie.imdbID !== id))
   }
-
-  useEffect(() => {
-    localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies))
-  }, [watchedMovies])
-
-  useEffect(() => {
-    const controller = new AbortController()
-
-    async function fetchMovies() {
-      try {
-        setIsLoading(true)
-        setError(null)
-        const res = await fetch(apiUrl + `&s=${query}`, {
-          signal: controller.signal,
-        })
-        if (!res.ok) throw new Error('Failed to load')
-        const data = await res.json()
-        if (data.Response === 'False') throw new Error(data.Error)
-        setMovies(data.Search)
-        setError(null)
-      } catch (error) {
-        if (error.name !== 'AbortError') setError(error.message)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    if (query.length < 3) {
-      setMovies([])
-      setError(null)
-      return
-    }
-
-    handleCloseSelectedMovie()
-    fetchMovies()
-
-    return () => {
-      controller.abort()
-    }
-  }, [query])
 
   return (
     <div className="bg-[#212529] p-[2.4rem] text-[#dee2e6]">

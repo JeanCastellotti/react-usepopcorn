@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Rating from './Rating'
 import Loader from './Loader'
+import { useKey } from '../hooks/useKey'
 
 const apiKey = import.meta.env.VITE_API_KEY
 const apiUrl = `http://www.omdbapi.com/?apikey=${apiKey}`
@@ -14,6 +15,8 @@ function SelectedMovie({
   const [selectedMovie, setSelectedMovie] = useState({})
   const [isLoading, setIsLoading] = useState(false)
   const [userRating, setUserRating] = useState(0)
+
+  const countRating = useRef(0)
 
   const isInWatchedMoviesList = watchedMovies.find(
     (movie) => movie.imdbID === selectedMovieID
@@ -45,21 +48,16 @@ function SelectedMovie({
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split(' ').at(0)),
       userRating,
+      countRating: countRating.current,
     })
     onCloseSelectedMovie()
   }
 
   useEffect(() => {
-    const handler = (e) => {
-      if (e.code === 'Escape') onCloseSelectedMovie()
-    }
+    if (userRating) countRating.current++
+  }, [userRating])
 
-    document.addEventListener('keydown', handler)
-
-    return () => {
-      document.removeEventListener('keydown', handler)
-    }
-  }, [onCloseSelectedMovie])
+  useKey('Escape', onCloseSelectedMovie)
 
   useEffect(() => {
     async function fetchMovieDetails() {
